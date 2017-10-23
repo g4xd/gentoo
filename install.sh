@@ -37,7 +37,7 @@ RESULT=1
 while [[ ! $RESULT -eq 0 ]] do
   DATE=$(date -d "-$COUNT day" +%Y%m%d)
   curl http://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64/stage3-amd64-$DATE.tar.bz2 | \
-  tar xjp --xattrs --numeric-owner 2>/dev/null
+  tar xjp --xattrs --numeric-owner
   RESULT=$?
   let COUNT++
 end
