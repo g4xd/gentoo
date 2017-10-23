@@ -33,8 +33,11 @@ hwclock --systohc
 # Installing a stage tarball
 cd /mnt/gentoo
 CURRENT_DATE=`date +%Y%m%d`
-while [[ $? -eq 0 ]] do
-  curl http://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64/stage3-amd64-$CURRENT_DATE.tar.bz2 | tar xvjpf --xattrs --numeric-owner 
+RESULT=1
+while [[ ! $RESULT -eq 0 ]] do
+  curl http://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64/stage3-amd64-$CURRENT_DATE.tar.bz2 | tar xjp --xattrs --numeric-owner
+  RESULT=$?
+  let CURRENT_DATE--
 end
 
  
