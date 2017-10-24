@@ -69,7 +69,7 @@ emerge --sync
 emerge --update --deep --newuse @world
 emerge cpuid2cpuflags
 sed -i "s/CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
-echo "MAKEOPTS=\"-j$(($(nproc)+1))\"" >> /etc/portage/make.conf
+echo "MAKEOPTS=\"-j$(nproc)\"" >> /etc/portage/make.conf
 
 # Timezone
 echo "Europe/Moscow" > /etc/timezone
