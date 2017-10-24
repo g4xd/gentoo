@@ -37,7 +37,7 @@ while [[ ! $RESULT -eq 0 ]] do
   tar xjp --xattrs --numeric-owner 2>/dev/null
   RESULT=$?
   let COUNT++
-end
+done
 
 # Selecting mirrors
 mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf
