@@ -76,7 +76,7 @@ echo "Europe/Moscow" > /etc/timezone
 emerge --config sys-libs/timezone-data
 
 # Configure locales
-sed -i '/UTF/s/^#en_US/en_US/' /etc/locale.gen
+sed -i '/en_US.UTF/s/#//' /etc/locale.gen
 locale-gen
 eselect locale set en_US.utf8
 env-update && source /etc/profile && export PS1="(chroot) $PS1"
@@ -93,7 +93,7 @@ FSTAB
 genkernel all
 
 # Host and domain information
-sed -i '/hostname/s/".*"/"gentoo"/' /etc/conf.d/hostname
+sed -i '/host/s/".*"/"gentoo"/' /etc/conf.d/hostname
 sed -i 's/\.\\O//' /etc/issue
 
 # Configuring the network
