@@ -85,7 +85,7 @@ env-update && source /etc/profile && export PS1="(chroot) $PS1"
 emerge --ask sys-kernel/gentoo-sources
 emerge --ask sys-kernel/linux-firmware
 emerge --ask sys-kernel/genkernel
-cat <<'FSTAB' >> /etc/fstab
+cat <<FSTAB >> /etc/fstab
 /dev/sda2   /boot   vfat    defaults,noatime    0 2
 /dev/sda3   none    swap    sw                  0 0
 /dev/sda4   /       ext4    noatime             0 1
