@@ -40,7 +40,7 @@ while [[ ! $RESULT -eq 0 ]] do
 done
 
 # Selecting mirrors
-mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf
+echo 'GENTOO_MIRRORS="http://mirror.yandex.ru/gentoo-distfiles/"' >> /mnt/gentoo/etc/portage/make.conf
 mkdir /mnt/gentoo/etc/portage/repos.conf
 cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
  
@@ -55,7 +55,7 @@ mount --rbind /dev /mnt/gentoo/dev
 mount --make-rslave /mnt/gentoo/dev
 
 # Entering the new environment
-cat <<EOF | chroot /mnt/gentoo /bin/bash
+cat <<CHROOT | chroot /mnt/gentoo /bin/bash
 source /etc/profile
 export PS1="(chroot) $PS1"
 
@@ -85,11 +85,11 @@ env-update && source /etc/profile && export PS1="(chroot) $PS1"
 emerge --ask sys-kernel/gentoo-sources
 emerge --ask sys-kernel/linux-firmware
 emerge --ask sys-kernel/genkernel
-cat <<'EOF' >> /etc/fstab
+cat <<'FSTAB' >> /etc/fstab
 /dev/sda2   /boot   vfat    defaults,noatime    0 2
 /dev/sda3   none    swap    sw                  0 0
 /dev/sda4   /       ext4    noatime             0 1
-EOF
+FSTAB
 genkernel all
 
 # Host and domain information
@@ -126,7 +126,7 @@ emerge --ask net-misc/dhcpcd
 emerge --ask --verbose sys-boot/grub:2
 grub-install --target=x86_64-efi --efi-directory=/boot --removable
 grub-mkconfig -o /boot/grub/grub.cfg
-EOF
+CHROOT
 
 cd
 umount -l /mnt/gentoo/dev{/shm,/pts,}
