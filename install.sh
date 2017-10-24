@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Configuring the network
-net-setup wlo1
-
 # Preparing the disks
 parted -a optimal /dev/sda \
 mklabel gpt \
@@ -42,6 +39,10 @@ while [[ ! $RESULT -eq 0 ]] do
   let COUNT++
 end
 
+# Selecting mirrors
+mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf
+mkdir /mnt/gentoo/etc/portage/repos.conf
+cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
  
 # Copy DNS info
 cp -L /etc/resolv.conf /mnt/gentoo/etc/
@@ -63,7 +64,71 @@ mkdir /boot
 mount /dev/sda2 /boot
 
 # Configuring Portage
-
 emerge-webrsync
 emerge --sync
 emerge --ask --update --deep --newuse @world
+emerge --ask cpuid2cpuflags
+sed -i "s/CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
+echo "MAKEOPTS=\"-j$(nproc)" >> /etc/portage/make.conf
+
+# Timezone
+echo "Europe/Moscow" > /etc/timezone
+emerge --config sys-libs/timezone-data
+
+# Configure locales
+sed -i '/UTF/s/^#en_US/en_US/' /etc/locale.gen
+locale-gen
+eselect locale set en_US.utf8
+env-update && source /etc/profile && export PS1="(chroot) $PS1"
+
+# Configuring kernel
+emerge --ask sys-kernel/gentoo-sources
+emerge --ask sys-kernel/linux-firmware
+emerge --ask sys-kernel/genkernel
+cat <<'EOF' >> /etc/fstab
+/dev/sda2   /boot   vfat    defaults,noatime    0 2
+/dev/sda3   none    swap    sw                  0 0
+/dev/sda4   /       ext4    noatime             0 1
+EOF
+genkernel all
+
+# Host and domain information
+sed -i '/hostname/s/".*"/"gentoo"/' /etc/conf.d/hostname
+sed -i 's/\.\\O//' /etc/issue
+
+# Configuring the network
+emerge --ask --noreplace net-misc/netifrc
+cd /etc/init.d
+ln -s net.lo net.wlo1
+rc-update add net.wlo1 default
+
+# Get PCMCIA working
+emerge --ask sys-apps/pcmciautils
+
+# Set root password
+echo -e "pass\npass\n" | passwd
+
+# System logger
+emerge --ask app-admin/sysklogd app-admin/logrotate
+rc-update add sysklogd default
+
+# Cron daemon
+emerge --ask sys-process/cronie
+rc-update add cronie default
+
+# File indexing
+emerge --ask sys-apps/mlocate
+
+# Installing a DHCP client
+emerge --ask net-misc/dhcpcd
+
+# GRUB2
+emerge --ask --verbose sys-boot/grub:2
+grub-install --target=x86_64-efi --efi-directory=/boot --removable
+grub-mkconfig -o /boot/grub/grub.cfg
+EOF
+
+cd
+umount -l /mnt/gentoo/dev{/shm,/pts,}
+umount -R /mnt/gentoo
+reboot
