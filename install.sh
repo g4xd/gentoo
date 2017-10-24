@@ -66,8 +66,8 @@ mount /dev/sda2 /boot
 # Configuring Portage
 emerge-webrsync
 emerge --sync
-emerge --ask --update --deep --newuse @world
-emerge --ask cpuid2cpuflags
+emerge --update --deep --newuse @world
+emerge cpuid2cpuflags
 sed -i "s/CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
 echo "MAKEOPTS=\"-j$(($(nproc)+1))\"" >> /etc/portage/make.conf
 
@@ -82,9 +82,9 @@ eselect locale set en_US.utf8
 env-update && source /etc/profile && export PS1="(chroot) $PS1"
 
 # Configuring kernel
-emerge --ask sys-kernel/gentoo-sources
-emerge --ask sys-kernel/linux-firmware
-emerge --ask sys-kernel/genkernel
+emerge sys-kernel/gentoo-sources
+emerge sys-kernel/linux-firmware
+emerge sys-kernel/genkernel
 cat <<FSTAB >> /etc/fstab
 /dev/sda2   /boot   vfat    defaults,noatime    0 2
 /dev/sda3   none    swap    sw                  0 0
@@ -97,33 +97,33 @@ sed -i '/host/s/".*"/"gentoo"/' /etc/conf.d/hostname
 sed -i 's/\.\\O//' /etc/issue
 
 # Configuring the network
-emerge --ask --noreplace net-misc/netifrc
+emerge --noreplace net-misc/netifrc
 cd /etc/init.d
 ln -s net.lo net.wlo1
 rc-update add net.wlo1 default
 
 # Get PCMCIA working
-emerge --ask sys-apps/pcmciautils
+emerge sys-apps/pcmciautils
 
 # Set root password
 echo -e "pass\npass\n" | passwd
 
 # System logger
-emerge --ask app-admin/sysklogd app-admin/logrotate
+emerge app-admin/sysklogd app-admin/logrotate
 rc-update add sysklogd default
 
 # Cron daemon
-emerge --ask sys-process/cronie
+emerge sys-process/cronie
 rc-update add cronie default
 
 # File indexing
-emerge --ask sys-apps/mlocate
+emerge sys-apps/mlocate
 
 # Installing a DHCP client
-emerge --ask net-misc/dhcpcd
+emerge net-misc/dhcpcd
 
 # GRUB2
-emerge --ask --verbose sys-boot/grub:2
+emerge --verbose sys-boot/grub:2
 grub-install --target=x86_64-efi --efi-directory=/boot --removable
 grub-mkconfig -o /boot/grub/grub.cfg
 CHROOT
