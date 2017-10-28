@@ -138,10 +138,10 @@ emerge x11-base/xorg-server
 emerge x11-wm/i3 x11-misc/i3status x11-misc/i3lock x11-misc/dmenu
 CHROOT
 
-cp /etc/wpa_supplicant/wpa_supplicant.conf /mnt/gentoo/etc/wpa_supplicant/
-cp /etc/conf.d/net /mnt/gentoo/etc/conf.d/
+#cp /etc/wpa_supplicant/wpa_supplicant.conf /mnt/gentoo/etc/wpa_supplicant/
+#cp /etc/conf.d/net /mnt/gentoo/etc/conf.d/
 
-cd
-umount -l /mnt/gentoo/dev{/shm,/pts,}
-umount -R /mnt/gentoo
-reboot
+#cd
+#umount -l /mnt/gentoo/dev{/shm,/pts,}
+#umount -R /mnt/gentoo
+#reboot
