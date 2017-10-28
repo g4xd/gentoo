@@ -57,7 +57,6 @@ mount --make-rslave /mnt/gentoo/dev
 # Entering the new environment
 cat <<CHROOT | chroot /mnt/gentoo /bin/bash
 source /etc/profile
-export PS1="(chroot) $PS1"
 
 # Mounting the boot partition
 mkdir /boot
@@ -65,11 +64,15 @@ mount /dev/sda2 /boot
 
 # Configuring Portage
 emerge-webrsync
-emerge --sync
-emerge --update --deep --newuse @world
 emerge cpuid2cpuflags
-sed -i "s/CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
+
+sed -i "/^CFLAGS/s/\".*\"/\"-march=native -O2 -pipe\"/" /etc/portage/make.conf
+sed -i "/^USE/s/\".*\"/\"X vulkan vaapi alsa xtf\"/" /etc/portage/make.conf
+sed -i "s/^CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
 echo "MAKEOPTS=\"-j$(nproc)\"" >> /etc/portage/make.conf
+echo 'VIDEO_CARDS="intel i965"' >> /etc/portage/make.conf
+
+emerge --update --deep --newuse @world
 
 # Timezone
 echo "Europe/Moscow" > /etc/timezone
@@ -79,7 +82,7 @@ emerge --config sys-libs/timezone-data
 sed -i '/en_US.UTF/s/#//' /etc/locale.gen
 locale-gen
 eselect locale set en_US.utf8
-env-update && source /etc/profile && export PS1="(chroot) $PS1"
+env-update && source /etc/profile
 
 # Configuring kernel
 emerge sys-kernel/gentoo-sources
@@ -97,6 +100,7 @@ sed -i '/host/s/".*"/"gentoo"/' /etc/conf.d/hostname
 sed -i 's/\.\\O//' /etc/issue
 
 # Configuring the network
+emerge net-wireless/wpa_supplicant
 emerge --noreplace net-misc/netifrc
 cd /etc/init.d
 ln -s net.lo net.wlo1
@@ -127,6 +131,9 @@ emerge --verbose sys-boot/grub:2
 grub-install --target=x86_64-efi --efi-directory=/boot --removable
 grub-mkconfig -o /boot/grub/grub.cfg
 CHROOT
+
+cp /etc/wpa_supplicant/wpa_supplicant.conf /mnt/gentoo/etc/wpa_supplicant/
+cp /etc/conf.d/net /mnt/gentoo/etc/conf.d/
 
 cd
 umount -l /mnt/gentoo/dev{/shm,/pts,}
