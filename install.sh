@@ -59,16 +59,16 @@ cat <<CHROOT | chroot /mnt/gentoo /bin/bash
 source /etc/profile
 
 # Mounting the boot partition
-mkdir /boot
+if [[ ! -d /boot ]]; then mkdir /boot; done
 mount /dev/sda2 /boot
 
 # Configuring Portage
 emerge-webrsync
-emerge cpuid2cpuflags
+emerge cpuid2cpuflags && \
+sed -i "s/^CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
 
 sed -i "/^CFLAGS/s/\".*\"/\"-march=native -O2 -pipe\"/" /etc/portage/make.conf
 sed -i "/^USE/s/\".*\"/\"X vulkan vaapi alsa xtf\"/" /etc/portage/make.conf
-sed -i "s/^CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
 echo "MAKEOPTS=\"-j$(nproc)\"" >> /etc/portage/make.conf
 echo 'VIDEO_CARDS="intel i965"' >> /etc/portage/make.conf
 
