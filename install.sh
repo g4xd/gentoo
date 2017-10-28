@@ -12,7 +12,7 @@ mkpart primary 3 131 \
 name 2 boot \
 mkpart primary 131 8323 \
 name 3 swap \
-mkpart primary 643 -1 \
+mkpart primary 8323 -1 \
 name 4 rootfs
 
 # Creating file systems
