@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 # Preparing the disks
 parted -a optimal /dev/sda \
