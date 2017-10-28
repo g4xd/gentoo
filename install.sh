@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+set -x
 
 # Preparing the disks
 parted -a optimal /dev/sda -s -- \
@@ -60,13 +60,14 @@ cat <<CHROOT | chroot /mnt/gentoo /bin/bash
 source /etc/profile
 
 # Mounting the boot partition
-if [[ ! -d /boot ]]; then mkdir /boot; done
+if [[ ! -d /boot ]]; then mkdir /boot; fi
 mount /dev/sda2 /boot
 
 # Configuring Portage
 emerge-webrsync
-emerge cpuid2cpuflags && \
-sed -i "s/^CPU_FLAGS_X86.*/$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
+emerge cpuid2cpuflags
+CPU_FLAGS=$(cpuinfo2cpuflags-x86)
+sed -i "s/^CPU_FLAGS_X86.*/$CPU_FLAGS/" /etc/portage/make.conf
 
 sed -i "/^CFLAGS/s/\".*\"/\"-march=native -O2 -pipe\"/" /etc/portage/make.conf
 sed -i "/^USE/s/\".*\"/\"X vulkan vaapi alsa xtf\"/" /etc/portage/make.conf
