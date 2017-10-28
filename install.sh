@@ -66,8 +66,7 @@ mount /dev/sda2 /boot
 # Configuring Portage
 emerge-webrsync
 emerge cpuid2cpuflags
-CPU_FLAGS=`cpuinfo2cpuflags-x86`
-sed -i "s/^CPU_FLAGS_X86.*/$CPU_FLAGS/" /etc/portage/make.conf
+sed -i "s/^CPU_FLAGS_X86.*/`cpuinfo2cpuflags-x86`/" /etc/portage/make.conf
 sed -i "/^CFLAGS/s/\".*\"/\"-march=native -O2 -pipe\"/" /etc/portage/make.conf
 sed -i "/^USE/s/\".*\"/\"X vulkan vaapi alsa xtf\"/" /etc/portage/make.conf
 echo "MAKEOPTS=\"-j$(nproc)\"" >> /etc/portage/make.conf
