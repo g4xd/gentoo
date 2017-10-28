@@ -2,7 +2,7 @@
 set -ex
 
 # Preparing the disks
-parted -a optimal /dev/sda \
+parted -a optimal /dev/sda -s \
 mklabel gpt \
 unit mib \
 mkpart primary 1 3 \
