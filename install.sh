@@ -130,18 +130,13 @@ emerge net-misc/dhcpcd
 emerge --verbose sys-boot/grub:2
 grub-install --target=x86_64-efi --efi-directory=/boot --removable
 grub-mkconfig -o /boot/grub/grub.cfg
-
-# Install i3wn and xserver
-#emerge x11-base/xorg-drivers
-#emerge x11-base/xorg-server
-#emerge x11-wm/i3 x11-misc/i3status x11-misc/i3lock x11-misc/dmenu
 CHROOT
 
 if [[ ! -d /etc/wpa_supplicant ]]; then mkdir /etc/wpa_supplicant/wpa_supplicant; fi
 cp /etc/wpa_supplicant/wpa_supplicant.conf /mnt/gentoo/etc/wpa_supplicant/
 cp /etc/conf.d/net /mnt/gentoo/etc/conf.d/
 
-#cd
-#umount -l /mnt/gentoo/dev{/shm,/pts,}
-#umount -R /mnt/gentoo
-#reboot
+cd
+umount -l /mnt/gentoo/dev{/shm,/pts,}
+umount -R /mnt/gentoo
+reboot
