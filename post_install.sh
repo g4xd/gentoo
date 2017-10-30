@@ -23,7 +23,8 @@ emerge app-admin/sudo \
   app-editors/vim \
   app-misc/ranger \
   media-video/ffmpeg \
-  dev-vcs/git
+  dev-vcs/git \
+  net-vpn/openvpn
 
 # Install google chrome
 echo "app-text/ghostscript-gpl cups\napp-text/xmlto text" /etc/portage/package.use/chrome
