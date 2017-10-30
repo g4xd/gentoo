@@ -68,7 +68,7 @@ emerge-webrsync
 emerge cpuid2cpuflags
 sed -i "s/^CPU_FLAGS_X86.*/\$(cpuinfo2cpuflags-x86)/" /etc/portage/make.conf
 sed -i "/^CFLAGS/s/\".*\"/\"-march=native -O2 -pipe\"/" /etc/portage/make.conf
-sed -i "/^USE/s/\".*\"/\"X vulkan vaapi alsa xft\"/" /etc/portage/make.conf
+sed -i "/^USE/s/\".*\"/\"X vulkan vaapi alsa xft zsh-completion\"/" /etc/portage/make.conf
 echo "MAKEOPTS=\"-j$(nproc)\"" >> /etc/portage/make.conf
 echo 'VIDEO_CARDS="intel i965"' >> /etc/portage/make.conf
 
