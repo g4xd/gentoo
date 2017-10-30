@@ -27,7 +27,8 @@ emerge app-admin/sudo \
   dev-vcs/git \
   net-vpn/openvpn \
   app-portage/layman \
-  app-editors/sublime-text
+  app-editors/sublime-text \
+  app-emulation/vagrant
   
 # Install zshell
 emerge app-shells/zsh \
