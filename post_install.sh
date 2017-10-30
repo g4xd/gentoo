@@ -26,6 +26,17 @@ emerge app-admin/sudo \
   media-video/ffmpeg \
   dev-vcs/git \
   net-vpn/openvpn
+  
+# Install zshell
+emerge app-shells/zsh \
+  zsh-completions
+  gentoo-zsh-completions
+  
+# Install laptop-mode
+emerge app-laptop/laptop-mode-tools
+ETH_DEV=$(ip a | awk -F': ' '/^2:/{print $2}')
+sed -i "/DEVICES/s/eth0/$ETH_DEV"/ /etc/laptop-mode/conf.d/ethernet.conf
+rc-update add laptop_mode default
 
 # Install google chrome
 echo "app-text/ghostscript-gpl cups\napp-text/xmlto text" /etc/portage/package.use/chrome
