@@ -26,7 +26,8 @@ emerge app-admin/sudo \
   media-video/ffmpeg \
   dev-vcs/git \
   net-vpn/openvpn \
-  app-portage/layman
+  app-portage/layman \
+  app-editors/sublime-text
   
 # Install zshell
 emerge app-shells/zsh \
