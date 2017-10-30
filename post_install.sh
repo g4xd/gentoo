@@ -15,6 +15,7 @@ emerge x11-wm/i3 \
   x11-misc/i3status \
   x11-misc/i3lock \
   x11-misc/dmenu \
+  x11-apps/setxkbmap \
   media-fonts/terminus-font
   
 # Install coretools
